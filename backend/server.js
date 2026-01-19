@@ -6,6 +6,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 const dbPath = path.join(__dirname, "..", "EventTicket.db");
+console.log("DB FILE:", dbPath);
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error("Failed to connect to SQLite database:", err.message);
@@ -19,6 +20,7 @@ app.use(express.json());
 
 const frontendPath = path.join(__dirname, "..", "frontend");
 app.use(express.static(frontendPath));
+
 
 app.post("/submit", (req, res) => {
   const {
@@ -53,8 +55,9 @@ app.post("/submit", (req, res) => {
   db.run(insertSql, params, function onInsert(err) {
     if (err) {
       console.error("Insert failed:", err.message);
-      return res.status(500).json({ error: "Failed to save customer." });
+      return res.status(500).json({ error: "Failed to save customer.", details: err.message });
     }
+    
 
     return res.status(201).json({ success: true, id: this.lastID });
   });
