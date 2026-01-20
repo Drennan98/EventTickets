@@ -110,7 +110,23 @@ input {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+select {
+  font-family: inherit;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(50, 55, 59, 0.2);
+  font-size: 0.95rem;
+  background: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
 input:focus {
+  outline: none;
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 3px rgba(244, 184, 96, 0.25);
+}
+
+select:focus {
   outline: none;
   border-color: var(--accent-2);
   box-shadow: 0 0 0 3px rgba(244, 184, 96, 0.25);
@@ -150,7 +166,25 @@ button {
   color: var(--text);
 }
 
+.secondary-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: rgba(50, 55, 59, 0.08);
+  color: var(--text);
+  text-decoration: none;
+}
+
 button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.15);
+}
+
+.secondary-link:hover {
   transform: translateY(-1px);
   box-shadow: 0 12px 24px rgba(15, 23, 42, 0.15);
 }
@@ -159,6 +193,62 @@ button:hover {
   font-size: 0.85rem;
   color: rgba(244, 214, 204, 0.75);
   margin: 0;
+}
+
+.form-status {
+  min-height: 20px;
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.summary {
+  grid-column: 1 / -1;
+}
+
+.summary-card {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.summary-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(244, 184, 96, 0.12), transparent 60%);
+  pointer-events: none;
+}
+
+.summary-card h2 {
+  margin: 0 0 16px;
+  font-size: 1.5rem;
+}
+
+.summary-grid {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 0.95rem;
+}
+
+.summary-row strong {
+  text-align: right;
+}
+
+.summary-total {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
 }
 
 @media (max-width: 720px) {
