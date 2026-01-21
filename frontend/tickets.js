@@ -1,3 +1,8 @@
+/**
+ * Elements in the DOM. 
+ * Grab all required elements from the page so we can update the UI and respond to user actions.
+ */
+
 const eventTypeSelect = document.getElementById("event-type");
 const eventSelect = document.getElementById("event");
 const orderForm = document.getElementById("order-form");
@@ -7,9 +12,19 @@ const summarySection = document.getElementById("order-summary");
 const summaryGrid = document.getElementById("summary-grid");
 const summaryTotal = document.getElementById("summary-total");
 
+
+/**
+ * Retrieve customer details either from the URL (if redirected from another page) or sessionStorage. 
+ */
+
 const urlParams = new URLSearchParams(window.location.search);
 const customerId = urlParams.get("customerId") || sessionStorage.getItem("customerId");
 const customerName = sessionStorage.getItem("customerName");
+
+
+/**
+ * Display a banner message about the customer placing the order. This will say if customer is old or new.
+ */
 
 if (customerName) {
   customerBanner.textContent = `Ordering tickets for ${customerName}.`;
@@ -17,13 +32,23 @@ if (customerName) {
   customerBanner.textContent = "Ordering tickets for new customer.";
 }
 
+/**
+ * If no customer ID exists, disable the form and inform the user they must return to customer page.
+ */
 if (!customerId) {
   orderStatus.textContent = "No customer found. Please return to the customer form.";
   orderForm.querySelector("button").disabled = true;
 }
 
+
+/** 
+* Turn numeric value into currency.  
+*/
 const formatMoney = (value) => `€${Number(value).toFixed(2)}`;
 
+/**
+ * Fetch all event types from the backend and populate event type dropdown.
+ */
 const loadEventTypes = async () => {
   try {
     const response = await fetch("/event-types");
@@ -40,6 +65,9 @@ const loadEventTypes = async () => {
   }
 };
 
+/**
+ * Fetch events for a selected event type and populate the event dropdown. 
+ */
 const loadEvents = async (eventTypeId) => {
   eventSelect.innerHTML = "<option value=\"\">Choose an event</option>";
   eventSelect.disabled = true;
@@ -59,7 +87,10 @@ const loadEvents = async (eventTypeId) => {
       eventSelect.appendChild(option);
     });
 
+    // Enable dropdown only if events exist.
     eventSelect.disabled = events.length === 0;
+
+    // User feedback if no events are found.
     if (events.length === 0) {
       orderStatus.textContent = "No events available for that type.";
     } else {
@@ -70,14 +101,24 @@ const loadEvents = async (eventTypeId) => {
   }
 };
 
+/**
+ * When the type changes, load the corresponding events dynamically. 
+ */
 eventTypeSelect.addEventListener("change", (event) => {
   loadEvents(event.target.value);
 });
 
+/**
+ * Form handling submission, send order to backend and display order summary.
+ */
 orderForm.addEventListener("submit", async (event) => {
   event.preventDefault();
   orderStatus.textContent = "Submitting order...";
 
+
+  /**
+   * Payload sent to backend to create order. 
+   */
   const payload = {
     customer_id: customerId,
     event_id: eventSelect.value,
@@ -91,12 +132,16 @@ orderForm.addEventListener("submit", async (event) => {
       body: JSON.stringify(payload),
     });
 
+    /**
+     * Handle backend validation or server errors. 
+     */
     if (!response.ok) {
       const error = await response.json();
       orderStatus.textContent = error.error || "Unable to submit order.";
       return;
     }
 
+    // Display order summary. 
     const data = await response.json();
     const summary = data.summary;
 
@@ -112,6 +157,7 @@ orderForm.addEventListener("submit", async (event) => {
       ["Price per ticket", formatMoney(summary.event.price)],
     ];
 
+    // Render each summary row. 
     items.forEach(([label, value]) => {
       const row = document.createElement("div");
       row.className = "summary-row";
@@ -127,4 +173,5 @@ orderForm.addEventListener("submit", async (event) => {
   }
 });
 
+// Populate event types on initial load.
 loadEventTypes();
