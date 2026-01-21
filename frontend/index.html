@@ -75,42 +75,7 @@
       </form>
     </section>
   </main>
-  <script>
-    const customerForm = document.getElementById("customer-form");
-    const formStatus = document.getElementById("form-status");
 
-    customerForm.addEventListener("submit", async (event) => {
-      event.preventDefault();
-      formStatus.textContent = "Saving customer details...";
-
-      const formData = new FormData(customerForm);
-      const payload = Object.fromEntries(formData.entries());
-
-      try {
-        const response = await fetch("/submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-
-        if (!response.ok) {
-          const error = await response.json();
-          formStatus.textContent = error.error || "Unable to save customer details.";
-          return;
-        }
-
-        const data = await response.json();
-        sessionStorage.setItem("customerId", data.id);
-        sessionStorage.setItem(
-          "customerName",
-          `${payload.first_name} ${payload.last_name}`
-        );
-
-        window.location.href = `tickets.html?customerId=${encodeURIComponent(data.id)}`;
-      } catch (err) {
-        formStatus.textContent = "Unable to reach the server. Please try again.";
-      }
-    });
-  </script>
+  <script src="index.js"></script>
 </body>
 </html>
