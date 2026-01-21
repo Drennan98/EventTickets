@@ -119,6 +119,7 @@ select {
   font-size: 0.95rem;
   background: #fff;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
 }
 
 input:focus {
