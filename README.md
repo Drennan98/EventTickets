@@ -76,7 +76,6 @@ EventTickets/
 - `GET /event-types` - Fetch all event types
 - `GET /events?eventTypeId={id}` - Fetch events by type
 - `POST /orders` - Create new order
-- `GET /customers` - Fetch all customers
 
 ## Database Schema
 
