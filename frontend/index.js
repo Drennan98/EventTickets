@@ -1,6 +1,29 @@
 //Selecting the HTML elements
 const customerForm = document.getElementById("customer-form");
 const formStatus = document.getElementById("form-status");
+const themeToggle = document.getElementById("theme-toggle");
+
+const applyTheme = (theme) => {
+  document.body.classList.toggle("dark", theme === "dark");
+
+  if (themeToggle) {
+    themeToggle.setAttribute("aria-pressed", theme === "dark");
+    themeToggle.textContent = theme === "dark" ? "Light mode" : "Dark mode";
+  }
+
+  localStorage.setItem("theme", theme);
+};
+
+const storedTheme = localStorage.getItem("theme");
+const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+applyTheme(storedTheme || (prefersDark ? "dark" : "light"));
+
+if (themeToggle) {
+  themeToggle.addEventListener("click", () => {
+    const nextTheme = document.body.classList.contains("dark") ? "light" : "dark";
+    applyTheme(nextTheme);
+  });
+}
 
 //defining what happens when the form is submitted
 customerForm.addEventListener("submit", async (event) => {

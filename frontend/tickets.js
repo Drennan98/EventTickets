@@ -11,6 +11,29 @@ const customerBanner = document.getElementById("customer-banner");
 const summarySection = document.getElementById("order-summary");
 const summaryGrid = document.getElementById("summary-grid");
 const summaryTotal = document.getElementById("summary-total");
+const themeToggle = document.getElementById("theme-toggle");
+
+const applyTheme = (theme) => {
+  document.body.classList.toggle("dark", theme === "dark");
+
+  if (themeToggle) {
+    themeToggle.setAttribute("aria-pressed", theme === "dark");
+    themeToggle.textContent = theme === "dark" ? "Light mode" : "Dark mode";
+  }
+
+  localStorage.setItem("theme", theme);
+};
+
+const storedTheme = localStorage.getItem("theme");
+const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+applyTheme(storedTheme || (prefersDark ? "dark" : "light"));
+
+if (themeToggle) {
+  themeToggle.addEventListener("click", () => {
+    const nextTheme = document.body.classList.contains("dark") ? "light" : "dark";
+    applyTheme(nextTheme);
+  });
+}
 
 
 /**
